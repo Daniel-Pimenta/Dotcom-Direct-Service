@@ -79,7 +79,6 @@ public class DirectResource {
       String ipAddress = request.getRemoteAddr().toString();
       Block newBlock = new Block();
       newBlock.Constructor(block.getId(), new java.util.Date(), ipAddress, 0, block.getHash(), "UPDATE IP");
-      newBlock.setOnLine(true);
       br.save(newBlock);
       return newBlock;
     }
