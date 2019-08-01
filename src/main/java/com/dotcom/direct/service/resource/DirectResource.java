@@ -40,7 +40,42 @@ public class DirectResource {
   }
 
   @GetMapping("/id")
-  public Block getNewId(HttpServletRequest request) {
+  public Block getId(HttpServletRequest request) {
+    String newId = this.getNewId().toUpperCase();
+    String ipAddress = request.getRemoteAddr().toString();
+
+    Block block = new Block();
+    block.Constructor(newId, new java.util.Date(), ipAddress, 0, "0", null, "PEDIDO DE ID");
+    return br.save(block);
+  }
+  
+  @PostMapping("/id")
+  public Block postId(@RequestBody Block block, HttpServletRequest request) {
+    System.out.println("Post ID");
+    Block b = br.findByIdAndMensagem(block.getId(),"PEDIDO DE ID");
+    if (b == null) {
+      String newId = this.getNewId().toUpperCase();
+      String ipAddress = request.getRemoteAddr().toString();
+
+      block.Constructor(newId, new java.util.Date(), ipAddress, 0, "0", block.getPublicKey(), "PEDIDO DE ID");
+      return br.save(block);
+    }
+    return null;
+  }
+
+  @GetMapping("/id/{id}")
+  public Block getFirstBlock(@PathVariable("id") String id) {
+    log.debug("getFirstBlock("+id+")");
+    return br.findByIdAndMensagem(id,"PEDIDO DE ID");
+  }
+
+  @GetMapping("/list")
+  public List<Block> getAllBlock() {
+    return br.findAll();
+  }
+  
+  
+  private String getNewId() {
     String[] numero = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
     String[] caracteres = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
         "s", "t", "u", "v", "w", "x", "y", "z" };
@@ -62,38 +97,7 @@ public class DirectResource {
     id.append(numero[posicao]);
     posicao = (int) (Math.random() * numero.length);
     id.append(numero[posicao]);
-    //
-    String ipAddress = request.getRemoteAddr().toString();
-    //
-    Block block = new Block();
-    block.Constructor(id.toString().toUpperCase(), new java.util.Date(), ipAddress, 0, "0", "PEDIDO DE ID");
-    return br.save(block);
-  }
-  
-  @PostMapping("/id")
-  public Block setNewIP(@RequestBody Block block, HttpServletRequest request) {
-
-    Block b = br.findByIdAndMensagem(block.getId(),"PEDIDO DE ID");
-    if (b.equals(block)) {
-      
-      String ipAddress = request.getRemoteAddr().toString();
-      Block newBlock = new Block();
-      newBlock.Constructor(block.getId(), new java.util.Date(), ipAddress, 0, block.getHash(), "UPDATE IP");
-      br.save(newBlock);
-      return newBlock;
-    }
-    return null;
-  }
-
-  @GetMapping("/id/{id}")
-  public Block getFirstBlock(@PathVariable("id") String id) {
-    log.debug("getFirstBlock("+id+")");
-    return br.findByIdAndMensagem(id,"PEDIDO DE ID");
-  }
-
-  @GetMapping("/list")
-  public List<Block> getAllBlock() {
-    return br.findAll();
+    return id.toString();
   }
   
 }

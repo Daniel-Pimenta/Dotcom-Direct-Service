@@ -20,16 +20,16 @@ public class Block {
   private String mensagem;
   private String hash;
   private String hashAnt;
-  private PublicKey publicKey;
+  private String publicKey;
 
-  public void Constructor(String id, Date data, String ip, int porta, String hashAnt, String mensagem) {
+  public void Constructor(String id, Date data, String ip, int porta, String hashAnt, String publicKey, String mensagem) {
     this.id = id;
     this.data = data;
     this.ip = ip;
     this.porta = porta;
     this.mensagem = mensagem;
     this.hashAnt = hashAnt;
-    this.hash = this.getHashCode();
+    this.publicKey = publicKey;
   }
 
   public String getId() {
@@ -60,7 +60,7 @@ public class Block {
     return hashAnt;
   }
 
-  public PublicKey getPublicKey() {
+  public String getPublicKey() {
     return publicKey;
   }
 
@@ -92,12 +92,12 @@ public class Block {
     this.hashAnt = hashAnt;
   }
 
-  public void setPublicKey(PublicKey publicKey) {
+  public void setPublicKey(String publicKey) {
     this.publicKey = publicKey;
   }
 
   private String getHashCode() {
-    String block = this.id + this.ip + this.porta + this.data + this.mensagem + this.hashAnt;
+    String block = this.id + this.ip + this.porta + this.data + this.mensagem + this.hashAnt + this.publicKey;
     try {
       /*
        * MessageDigest algorithm = MessageDigest.getInstance("SHA-256"); byte
@@ -116,48 +116,5 @@ public class Block {
     }
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Block other = (Block) obj;
-    if (data == null) {
-      if (other.data != null)
-        return false;
-    } else if (!data.equals(other.data))
-      return false;
-    if (hash == null) {
-      if (other.hash != null)
-        return false;
-    } else if (!hash.equals(other.hash))
-      return false;
-    if (hashAnt == null) {
-      if (other.hashAnt != null)
-        return false;
-    } else if (!hashAnt.equals(other.hashAnt))
-      return false;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (ip == null) {
-      if (other.ip != null)
-        return false;
-    } else if (!ip.equals(other.ip))
-      return false;
-    if (mensagem == null) {
-      if (other.mensagem != null)
-        return false;
-    } else if (!mensagem.equals(other.mensagem))
-      return false;
-    if (porta != other.porta)
-      return false;
-    return true;
-  }
 
 }
